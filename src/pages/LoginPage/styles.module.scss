@@ -50,4 +50,8 @@
     text-decoration: underline;
     color: #32403B;
     font-size: 24px;
+
+    &:hover {
+        color: var(--primary-color);
+    }
 }

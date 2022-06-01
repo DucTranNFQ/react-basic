@@ -3,19 +3,20 @@ import {
   Routes,
   Route
 } from "react-router-dom";
+import 'antd/dist/antd.css';
 
-import GlobalStyle from "./components/GlobalStyles";
-import Form from "./components/Form";
-import Header from "./components/Header"
+import GlobalStyle from "./GlobalStyles";
+import LoginPage from "./pages/LoginPage";
+import SignupPage from "./pages/SignupPage";
 
 function App() {
   return (
     <GlobalStyle>
-      <div style={{position: "fixed", top: "0", right: "0", bottom: "0", left: "0", display: "flex", justifyContent: "center", alignItems: "center", background: "#A7D7C5"}}>
-        <Routes>
-          <Route path="/signup" element={ <Form type="signup" /> } />
-          <Route path="/login" element={ <Form type="login" /> } />
-        </Routes>
+      <div className="formBackground">
+          <Routes>
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/signup" element={<SignupPage />} />
+          </Routes>
       </div>
     </GlobalStyle>
   );
