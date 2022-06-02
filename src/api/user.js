@@ -1,12 +1,12 @@
 export default {
-register() {
-    return new Promise((resolve) => {
-    setTimeout(() => {
-        resolve({
-        firstName: 'Binh',
-        lastName: 'Tran'
+    fetch() {
+        return new Promise((resolve) => {
+            const timeId = setTimeout(() => {
+                clearTimeout(timeId);
+                resolve({
+                    status: '200',
+                })
+            }, 1000)
         })
-    }, 1000)
-    })
-}
+    }
 }   

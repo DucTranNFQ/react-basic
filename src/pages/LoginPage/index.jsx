@@ -33,7 +33,7 @@ export default function SignupForm() {
       <div className={clsx("w-100", "mb-3", styles.error)}>
         {formik.errors.password ? formik.errors.password : null}
       </div>
-      <Button primary className="mb-3" type="submit">Login</Button>
+      <Button primary loading className="mb-3" type="submit">Login</Button>
       <div className={styles.text}>Already Have An Account? <Link className={styles.link} to="/signup">Signup</Link></div>
     </form>
   )

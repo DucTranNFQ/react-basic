@@ -6,10 +6,9 @@ export default function Input(props) {
   const classes = clsx(
     props.className,
     {
-      [styles.disabled]: true,
+      [styles.disabled]: props.disabled,
     }
   )
-  console.log(props)
 
   return (
     <input {...props} className={classes}/>

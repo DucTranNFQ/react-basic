@@ -12,6 +12,6 @@ export default function Button({children, primary, disabled, loading, onClick, c
     )
 
   return (
-    <button {...props} className={classes} onClick={onClick}>{children} {loading && <div class="ldsEllipsis"><div></div><div></div><div></div><div></div></div> }</button>
+    <button {...props} className={classes} onClick={onClick}>{children} {loading && <div className="ldsEllipsis"><div></div><div></div><div></div><div></div></div> }</button>
   )
 }

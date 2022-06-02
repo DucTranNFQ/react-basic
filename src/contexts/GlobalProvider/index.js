@@ -1,20 +1,9 @@
 import React, { useContext, useEffect, useState } from 'react'
-import api from '../../api/user'
 
 const GlobalDataContext = React.createContext()
 
-function GlobalDataProvider(props) {
+function GlobalDataProvider({children}) {
   const [value, setValue] = useState({})
-
-  useEffect(() => {
-    fetchUserData()
-    // eslint-disable-next-line
-  }, []);
-
-  async function fetchUserData() {
-    const userData = await api.register()
-    setValue(userData)
-  }
 
   const setField = (field, val) => {
     const _value = {...value}
@@ -29,14 +18,9 @@ function GlobalDataProvider(props) {
 
   return (
     <GlobalDataContext.Provider value={providerValues}>
-      {props.children}
+      {children}
     </GlobalDataContext.Provider>
   )
 }
 
-function useGlobalData() {
-  return useContext(GlobalDataContext)
-}
-
-export default GlobalDataContext
-export { GlobalDataProvider, useGlobalData }
+export { GlobalDataProvider, GlobalDataContext }
