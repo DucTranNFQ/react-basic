@@ -1,8 +1,9 @@
-import React, {useState, useContext, useEffect} from 'react';
+import React, {useState, useContext} from 'react';
 import { Link } from 'react-router-dom';
 import clsx from 'clsx';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
+import { message } from 'antd';
 
 import styles from '../auth.module.scss';
 import { Input, Button } from '../../../components';
@@ -33,6 +34,7 @@ export default function SignupForm() {
     onSubmit: async (values) => {
       setIsSubmitting(true);
       await new Promise((r) => setTimeout(r, 1000));
+      message.success('signup successfully!')
       globalData.setField("user", JSON.stringify(values))
       setIsSubmitting(false);
     },
@@ -57,7 +59,7 @@ export default function SignupForm() {
         {formik.errors.confirmPassword ? formik.errors.confirmPassword : null}
       </div>
       <Button primary loading={isSubmitting} className="mb-3" type="submit">Create Account</Button>
-      <div className={styles.text}>Already Have An Account? <Link className={styles.link} to="/auth/login">Login</Link></div>
+      <div className={styles.text}>Already Have An Account? <Link className={styles.link} to="/login">Login</Link></div>
     </form>
   )
 }
