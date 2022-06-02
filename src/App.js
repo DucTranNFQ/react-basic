@@ -1,40 +1,19 @@
-import React, { useContext } from "react";
-import {
-  Routes,
-  Route,
-  Link
-} from "react-router-dom";
+import React from "react";
+import {Routes, Route, Outlet} from "react-router-dom";
 import 'antd/dist/antd.css';
 
-import GlobalStyle from "./GlobalStyles";
-import { GlobalDataProvider } from "./contexts/GlobalProvider";
-import LoginPage from "./pages/LoginPage";
-import SignupPage from "./pages/SignupPage";
-
-
+import {LoginPage, SignupPage} from "./pages/authPage";
 
 function App() {
 
   return (
-    <GlobalDataProvider>
-      <GlobalStyle>
-        <div className="formBackground">
-            <Routes>
-              {/* <Route path="/login" element={<LoginPage />} />
-              <Route path="/signup" element={<SignupPage />} /> */}
-              <Route path="/" element={<App />}>
-        <Route index element={<Home />} />
-        <Route path="teams" element={<Teams />}>
-          <Route path=":teamId" element={<Team />} />
-          <Route path="new" element={<NewTeamForm />} />
-          <Route index element={<LeagueStandings />} />
-        </Route>
-      </Route>
-            </Routes>
 
-        </div>
-      </GlobalStyle>
-    </GlobalDataProvider>
+    <Routes>
+      <Route path="auth" element={<div className="formBackground"><Outlet /></div>}>
+          <Route path="signup" element={<SignupPage />} />
+          <Route path="login" element={<LoginPage />} />
+      </Route>
+    </Routes>
   );
 }
 

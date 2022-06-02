@@ -3,10 +3,9 @@ import { Link } from 'react-router-dom';
 import clsx from 'clsx';
 import { useFormik } from 'formik';
 
-import { GlobalDataContext } from '../../contexts/GlobalProvider';
-import styles from './styles.module.scss';
-import { Input, Button } from '../../components';
-import api from '../../api/user';
+import styles from '../auth.module.scss';
+import { Input, Button } from '../../../components';
+import { GlobalDataContext } from '../../../contexts/GlobalProvider';
 
 export default function SignupForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -50,7 +49,7 @@ export default function SignupForm() {
         {formik.errors.confirmPassword ? formik.errors.confirmPassword : null}
       </div>
       <Button primary loading={isSubmitting} className="mb-3" type="submit">Create Account</Button>
-      <div className={styles.text}>Already Have An Account? <Link className={styles.link} to="/login">Login</Link></div>
+      <div className={styles.text}>Already Have An Account? <Link className={styles.link} to="/auth/login">Login</Link></div>
     </form>
   )
 }
