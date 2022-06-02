@@ -7,11 +7,10 @@ import { message } from 'antd';
 
 import styles from '../auth.module.scss';
 import { Input, Button } from '../../../components';
-import { GlobalDataContext } from '../../../contexts/GlobalProvider';
+import {userAPI} from '../../../api/userAPI';
 
 export default function SignupForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const globalData = useContext(GlobalDataContext);
 
   const formik = useFormik({
     initialValues: {
@@ -33,9 +32,12 @@ export default function SignupForm() {
     }),
     onSubmit: async (values) => {
       setIsSubmitting(true);
-      await new Promise((r) => setTimeout(r, 1000));
-      message.success('signup successfully!')
-      globalData.setField("user", JSON.stringify(values))
+      
+      const response = await userAPI.register(values);
+      if(response.status === 200) {
+        message.success('signup successfully!')
+      }
+
       setIsSubmitting(false);
     },
   });

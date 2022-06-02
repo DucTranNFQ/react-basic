@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useContext } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import clsx from 'clsx';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
@@ -7,9 +7,13 @@ import {message} from 'antd';
 
 import styles from '../auth.module.scss';
 import { Input, Button } from '../../../components';
+import { GlobalDataContext } from '../../../contexts/GlobalProvider';
+import {userAPI} from '../../../api/userAPI';
 
 export default function SignupForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const globalData = useContext(GlobalDataContext);
+  const navigate = useNavigate();
 
   const formik = useFormik({
     initialValues: {
@@ -27,8 +31,17 @@ export default function SignupForm() {
     onSubmit: async values => {
       setIsSubmitting(true)
 
-      await new Promise((r) => setTimeout(r, 1000));
-      message.success("Login successfully")
+      const response = await userAPI.login(values);
+      console.log(response)
+      if(response.status === 401) {
+        message.warning("email or password was wrong")
+      } else if (response.status === 200) {
+        message.success("Login successfully")
+        localStorage.setItem('token', response.token)
+        globalData.setField('userData', response)
+        navigate('/dashboard')
+      }
+
 
       setIsSubmitting(false)
     },
@@ -40,11 +53,11 @@ export default function SignupForm() {
         <h1 className={styles.title}>Login</h1>
         <p className={styles.text}>Login to enjoy all the services without any ads for free!</p>
       </div>
-      <Input type="text" placeholder="Email Address" className={styles.input} value={formik.values.email} onChange={formik.handleChange} onBlur={formik.handleBlur} name="email"/>
+      <Input disabled={isSubmitting} type="text" placeholder="Email Address" className={styles.input} value={formik.values.email} onChange={formik.handleChange} onBlur={formik.handleBlur} name="email"/>
       <div className={clsx("w-100", "mb-3", styles.error)}>
         {formik.errors.email ? formik.errors.email : null}
       </div>
-      <Input type="password" placeholder="password" className={styles.input} value={formik.values.password} onChange={formik.handleChange} onBlur={formik.handleBlur} name="password"/>
+      <Input disabled={isSubmitting} type="password" placeholder="password" className={styles.input} value={formik.values.password} onChange={formik.handleChange} onBlur={formik.handleBlur} name="password"/>
       <div className={clsx("w-100", "mb-3", styles.error)}>
         {formik.errors.password ? formik.errors.password : null}
       </div>
