@@ -1,21 +1,34 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import clsx from 'clsx';
 import { useFormik } from 'formik';
+import * as Yup from 'yup';
 
 import styles from '../auth.module.scss';
 import { Input, Button } from '../../../components';
 
 export default function SignupForm() {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const formik = useFormik({
     initialValues: {
       email: '',
       password: '',
-      confirmPassword: ''
     },
-    validate,
-    onSubmit: values => {
-      console.log(values)
+    validationSchema: Yup.object({
+      email: Yup.string()
+        .email('Invalid email address')
+        .required('*Please enter an email'),
+      password: Yup.string()
+        .min(3, 'Password should be 3 chars minimum.')
+        .required('*Please enter a password')
+    }),
+    onSubmit: async values => {
+      setIsSubmitting(true)
+      await new Promise((r) => setTimeout(r, 1000));
+      
+
+      setIsSubmitting(false)
     },
   });
 
@@ -33,29 +46,8 @@ export default function SignupForm() {
       <div className={clsx("w-100", "mb-3", styles.error)}>
         {formik.errors.password ? formik.errors.password : null}
       </div>
-      <Button primary loading className="mb-3" type="submit">Login</Button>
+      <Button primary loading={isSubmitting} className="mb-3" type="submit">Login</Button>
       <div className={styles.text}>Already Have An Account? <Link className={styles.link} to="/auth/signup">Signup</Link></div>
     </form>
   )
-}
-
-const validate = (values) => {
-  const errors = {};
-    if(!values.email) {
-      errors.email = 'Required';
-    } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
-      errors.email = 'Invalid email address';
-    }
-
-    if(!values.password) {
-      errors.password = "Required";
-    }
-
-    if(!values.confirmPassword) {
-      errors.confirmPassword = "Required";
-    } else if (values.password && values.password !== values.confirmPassword) {
-      errors.confirmPassword = "passwords do not match";
-    }
-
-  return errors;
 }

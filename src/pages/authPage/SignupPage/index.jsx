@@ -2,6 +2,7 @@ import React, {useState, useContext, useEffect} from 'react';
 import { Link } from 'react-router-dom';
 import clsx from 'clsx';
 import { useFormik } from 'formik';
+import * as Yup from 'yup';
 
 import styles from '../auth.module.scss';
 import { Input, Button } from '../../../components';
@@ -10,10 +11,6 @@ import { GlobalDataContext } from '../../../contexts/GlobalProvider';
 export default function SignupForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const globalData = useContext(GlobalDataContext);
-  
-  useEffect(() => {
-    console.log(globalData)
-  }, [globalData])
 
   const formik = useFormik({
     initialValues: {
@@ -21,7 +18,18 @@ export default function SignupForm() {
       password: '',
       confirmPassword: ''
     },
-    validate,
+    validationSchema: Yup.object({
+      email: Yup.string()
+        .email('Invalid email address')
+        .required('*Please enter an email'),
+      password: Yup.string()
+        .min(3, 'Password should be 3 chars minimum.')
+        .required('*Please enter a password'),
+      confirmPassword: Yup.string()
+        .min(3, 'Password should be 3 chars minimum.')
+        .oneOf([Yup.ref('password'), null], 'Passwords must match')
+        .required('*Please enter a password'),
+    }),
     onSubmit: async (values) => {
       setIsSubmitting(true);
       await new Promise((r) => setTimeout(r, 1000));
@@ -52,25 +60,4 @@ export default function SignupForm() {
       <div className={styles.text}>Already Have An Account? <Link className={styles.link} to="/auth/login">Login</Link></div>
     </form>
   )
-}
-
-const validate = (values) => {
-  const errors = {};
-    if(!values.email) {
-      errors.email = '* Please enter email';
-    } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
-      errors.email = 'Invalid email address';
-    }
-
-    if(!values.password) {
-      errors.password = "* Please enter password";
-    }
-
-    if(!values.confirmPassword) {
-      errors.confirmPassword = "* Please enter confirm password";
-    } else if (values.password && values.password !== values.confirmPassword) {
-      errors.confirmPassword = "passwords do not match";
-    }
-
-  return errors;
 }
