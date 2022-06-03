@@ -32,14 +32,15 @@ export default function SignupForm() {
       setIsSubmitting(true)
 
       const response = await userAPI.login(values);
-      console.log(response)
+
       if(response.status === 401) {
         message.warning("email or password was wrong")
       } else if (response.status === 200) {
         message.success("Login successfully")
         localStorage.setItem('token', response.token)
-        globalData.setField('userData', response)
-        navigate('/dashboard')
+        const userData = await userAPI.fetchUserData(response.token);
+        globalData.setField('userData', userData)
+        navigate('/')
       }
 
 

@@ -12,7 +12,6 @@ import MainLayout from "./layouts/MainLayout";
 function App() {
   const globalData = useContext(GlobalDataContext);
   const {userData} = globalData;
-  console.log(userData)
 
   return (
     <>

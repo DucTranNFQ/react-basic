@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import { Outlet, Link } from 'react-router-dom'
 import { Layout, Menu } from 'antd';
 import {
@@ -6,16 +6,27 @@ import {
   MenuFoldOutlined,
   SettingOutlined,
   LogoutOutlined,
-  DashboardOutlined
+  DashboardOutlined,
+  LoginOutlined,
+  UserAddOutlined
 } from '@ant-design/icons';
 
 import style from "./MainLayout.module.scss"
+import { userAPI } from '../../api/userAPI';
 
 const { Header, Sider, Content } = Layout;
 
 export default function MainLayout() {
   const [collapsed, setCollapsed] = useState(false);
-
+  const [userData, setUserData] = useState({});
+    useEffect(() => {
+        userAPI.fetchUserData(localStorage.token).then(user => setUserData(user))
+    }, [])
+    const { role } = userData;
+    const handleLogout = () => {
+        localStorage.removeItem('token')
+        setUserData({})
+    }
   return (
     <>
         <Layout>
@@ -25,24 +36,31 @@ export default function MainLayout() {
 				theme="dark"
 				mode="inline"
 				defaultSelectedKeys={['1']}
-                items={[
-                    {
-                        key: '1',
-                        icon: <DashboardOutlined />,
-                        label: <Link to="dashboard">Dashboard</Link>,
-                    },
-                    {
-                        key: '2',
-                        icon: <SettingOutlined />,
-                        label: <Link to="settings">Settings</Link>,
-                    },
-                    {
-                        key: '3',
-                        icon: <LogoutOutlined />,
-                        label: <Link to="logout">Logout</Link>,
-                    },
-                ]}
-			/>
+			>
+                {
+                    role === 'admin' || role === 'member' ? 
+                    <Menu.Item icon={<DashboardOutlined />} key="dashboard"><Link to="dashboard">Dashboard</Link></Menu.Item>
+                    : null
+                }
+                {
+                    role === 'admin' ? 
+                    <Menu.Item icon={<SettingOutlined />} key="settings"><Link to="settings">Settings</Link></Menu.Item>
+                    : null
+                }
+                {
+                    role === 'admin' || role === 'member' ? 
+                    <Menu.Item icon={<LogoutOutlined />} key="logout" onClick={handleLogout}>Logout</Menu.Item>
+                    : null
+                }
+                {
+                    !localStorage.token &&
+                    <Menu.Item icon={<LoginOutlined />} key="login"><Link to="login">Login</Link></Menu.Item>
+                }
+                {
+                    !localStorage.token &&
+                    <Menu.Item icon={<UserAddOutlined />} key="signup"><Link to="signup">Signup</Link></Menu.Item>
+                }
+            </Menu>
 			</Sider>
 			<Layout className="site-layout">
 				<Header

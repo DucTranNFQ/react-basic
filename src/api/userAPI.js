@@ -56,7 +56,7 @@ export const userAPI = {
         return new Promise((resolve) => {
           setTimeout(() => {
             resolve({
-              email: 'dangkhoa.duong@nfq.asia',
+              email: 'tblyduc2412@gmail.com',
               role: 'member',
             });
           }, 0);
