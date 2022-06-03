@@ -8,7 +8,8 @@ import {
   LogoutOutlined,
   DashboardOutlined,
   LoginOutlined,
-  UserAddOutlined
+  UserAddOutlined,
+  UserOutlined
 } from '@ant-design/icons';
 
 import style from "./MainLayout.module.scss"
