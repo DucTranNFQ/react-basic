@@ -7,14 +7,16 @@ import {
     EditOutlined,
 } from "@ant-design/icons";
 
-import { CreateAnimalForm } from "../../components";
+import { CreateAnimalForm, UpdateAnimalForm } from "../../components";
 import fetchAPI from "../../utils/fetchAPI";
 import { GlobalDataContext } from "../../contexts/GlobalProvider";
 
 const App = () => {
     const [selectedRowKeys, setSelectedRowKeys] = useState([]);
     const globalData = useContext(GlobalDataContext);
-    const [visible, setVisible] = useState(false);
+    const [visibleCreate, setVisibleCreate] = useState(false);
+    const [visibleUpdate, setVisibleUpdate] = useState(false);
+    const [dataUpdate, setDataUpdate] = useState({});
     const [updateUI, setUpdateUI] = useState(false);
     const animalsURL = "https://629836b0f2decf5bb73d67d4.mockapi.io/animals";
 
@@ -30,7 +32,11 @@ const App = () => {
                 );
             }
         });
-        setVisible(false);
+        setVisibleCreate(false);
+    };
+
+    const onUpdate = (values) => {
+        console.log();
     };
 
     useEffect(() => {
@@ -38,8 +44,9 @@ const App = () => {
         response.then((animals) => globalData.setField("animals", animals));
     }, [updateUI]);
 
-    const handleEdit = (record) => {
-        console.log(record);
+    const onClickEdit = (record) => {
+        setVisibleUpdate(true);
+        setDataUpdate(record);
     };
 
     const handleDelete = (record) => {
@@ -81,7 +88,7 @@ const App = () => {
                     <>
                         <Button
                             type="text"
-                            onClick={() => handleEdit(record)}
+                            onClick={() => onClickEdit(record)}
                             icon={<EditOutlined />}
                         >
                             Edit
@@ -156,17 +163,26 @@ const App = () => {
                 type="primary"
                 shape="round"
                 icon={<PlusCircleOutlined />}
-                onClick={() => setVisible(true)}
+                onClick={() => setVisibleCreate(true)}
             >
                 Add
             </Button>
 
             <CreateAnimalForm
-                visible={visible}
+                visible={visibleCreate}
                 onCreate={onCreate}
                 onCancel={() => {
-                    setVisible(false);
+                    setVisibleCreate(false);
                 }}
+            />
+
+            <UpdateAnimalForm
+                visible={visibleUpdate}
+                onCreate={onCreate}
+                onCancel={() => {
+                    setVisibleUpdate(false);
+                }}
+                prevData={{ dataUpdate }}
             />
 
             <Table
