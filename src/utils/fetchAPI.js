@@ -21,7 +21,7 @@ const fetchAPI = {
                 };
             });
     },
-    async post(url = "", data = {}) {
+    async post(data = {}, url = "") {
         return await fetch(url, {
             method: "POST",
             headers: {
@@ -30,7 +30,15 @@ const fetchAPI = {
             body: JSON.stringify(data),
         });
     },
-    put(url = "", id = "") {},
+    async put(data = {}, url = "", id = "") {
+        return await fetch(`${url}/${id}`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
+        });
+    },
     async delete(url = "", id = "") {
         return await fetch(`${url}/${id}`, {
             method: "DELETE",
