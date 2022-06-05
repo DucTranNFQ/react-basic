@@ -30,8 +30,12 @@ const fetchAPI = {
             body: JSON.stringify(data),
         });
     },
-    put(url, id) {},
-    delete(url, id) {},
+    put(url = "", id = "") {},
+    async delete(url = "", id = "") {
+        return await fetch(`${url}/${id}`, {
+            method: "DELETE",
+        });
+    },
 };
 
 export default fetchAPI;

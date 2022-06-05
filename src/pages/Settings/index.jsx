@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from "react";
 import "antd/dist/antd.css";
-import { Table, Button, message } from "antd";
+import { Table, Button, message, Popconfirm } from "antd";
 import {
     PlusCircleOutlined,
     DeleteOutlined,
@@ -34,14 +34,26 @@ const App = () => {
     };
 
     useEffect(() => {
-        const response = fetchAPI.getAll(
-            "https://629836b0f2decf5bb73d67d4.mockapi.io/animals"
-        );
-        response.then((result) => globalData.setField("animals", result));
+        const response = fetchAPI.getAll(animalsURL);
+        response.then((animals) => globalData.setField("animals", animals));
     }, [updateUI]);
 
-    const handleEdit = (e) => {
-        console.log(e);
+    const handleEdit = (record) => {
+        console.log(record);
+    };
+
+    const handleDelete = (record) => {
+        const response = fetchAPI.delete(animalsURL, record.id);
+        response.then((res) => {
+            if (res.status === 200) {
+                setUpdateUI(!updateUI);
+                message.success("Animal is deleted!");
+            } else {
+                message.error(
+                    "Error! An error occurred. Please try again later"
+                );
+            }
+        });
     };
 
     const columns = [
@@ -74,14 +86,20 @@ const App = () => {
                         >
                             Edit
                         </Button>
-                        <Button
-                            type="text"
-                            danger
-                            onClick={() => handleEdit(record)}
-                            icon={<DeleteOutlined />}
+                        <Popconfirm
+                            title="Are you sure you want to delete this item？"
+                            okText="Yes"
+                            cancelText="No"
+                            onConfirm={() => handleDelete(record)}
                         >
-                            Delete
-                        </Button>
+                            <Button
+                                type="text"
+                                danger
+                                icon={<DeleteOutlined />}
+                            >
+                                Delete
+                            </Button>
+                        </Popconfirm>
                     </>
                 );
             },

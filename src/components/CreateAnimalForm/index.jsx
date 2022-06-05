@@ -6,7 +6,7 @@ const CreateAnimalForm = ({ visible, onCreate, onCancel }) => {
     return (
         <Modal
             visible={visible}
-            title="Create Animal"
+            title="Create a new Animal"
             okText="Create"
             cancelText="Cancel"
             onCancel={onCancel}
