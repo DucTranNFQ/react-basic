@@ -1,14 +1,19 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import "antd/dist/antd.css";
 import { Table, Button, message } from "antd";
-import { PlusCircleOutlined } from "@ant-design/icons";
+import {
+    PlusCircleOutlined,
+    DeleteOutlined,
+    EditOutlined,
+} from "@ant-design/icons";
 
 import { CreateAnimalForm } from "../../components";
 import fetchAPI from "../../utils/fetchAPI";
+import { GlobalDataContext } from "../../contexts/GlobalProvider";
 
 const App = () => {
     const [selectedRowKeys, setSelectedRowKeys] = useState([]);
-    const [animals, setAnimals] = useState([]);
+    const globalData = useContext(GlobalDataContext);
     const [visible, setVisible] = useState(false);
     const [updateUI, setUpdateUI] = useState(false);
     const animalsURL = "https://629836b0f2decf5bb73d67d4.mockapi.io/animals";
@@ -32,8 +37,7 @@ const App = () => {
         const response = fetchAPI.getAll(
             "https://629836b0f2decf5bb73d67d4.mockapi.io/animals"
         );
-        response.then((result) => setAnimals(result));
-        console.log("render");
+        response.then((result) => globalData.setField("animals", result));
     }, [updateUI]);
 
     const handleEdit = (e) => {
@@ -63,13 +67,18 @@ const App = () => {
             render: (_, record) => {
                 return (
                     <>
-                        <Button type="text" onClick={() => handleEdit(record)}>
+                        <Button
+                            type="text"
+                            onClick={() => handleEdit(record)}
+                            icon={<EditOutlined />}
+                        >
                             Edit
                         </Button>
                         <Button
                             type="text"
                             danger
                             onClick={() => handleEdit(record)}
+                            icon={<DeleteOutlined />}
                         >
                             Delete
                         </Button>
@@ -127,6 +136,7 @@ const App = () => {
         <>
             <Button
                 type="primary"
+                shape="round"
                 icon={<PlusCircleOutlined />}
                 onClick={() => setVisible(true)}
             >
@@ -144,7 +154,7 @@ const App = () => {
             <Table
                 rowSelection={rowSelection}
                 columns={columns}
-                dataSource={animals}
+                dataSource={globalData.animals}
             />
         </>
     );
