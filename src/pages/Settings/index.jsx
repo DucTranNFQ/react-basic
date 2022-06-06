@@ -6,6 +6,7 @@ import {
   DeleteOutlined,
   EditOutlined,
 } from "@ant-design/icons";
+import moment from 'moment';
 
 import { CreateAnimalForm, UpdateAnimalForm } from "../../components";
 import fetchAPI from "../../utils/fetchAPI";
@@ -54,8 +55,9 @@ const App = () => {
     response.then(res => res.json()).then(data => {
         const animals = data.map(item => {
             return {
+                ...item,
+                createdAt: moment(item.createdAt).format('L'),
                 key: item.id,
-                ...item
             }
         })
         globalData.setField("animals", animals)
