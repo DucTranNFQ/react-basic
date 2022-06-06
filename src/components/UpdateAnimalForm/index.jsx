@@ -1,10 +1,15 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Modal, Form, Input } from "antd";
 
 const UpdateAnimalForm = ({ visible, onUpdate, onCancel, prevData }) => {
     const [form] = Form.useForm();
-    console.log("update form", prevData);
+    form.setFieldsValue({
+        name: prevData.name,
+        age: prevData.age,
+        type: prevData.type,
+    })
     return (
+        <>
         <Modal
             visible={visible}
             title="Update an Animal"
@@ -15,7 +20,7 @@ const UpdateAnimalForm = ({ visible, onUpdate, onCancel, prevData }) => {
                 form.validateFields()
                     .then((values) => {
                         form.resetFields();
-                        onUpdate(values);
+                        onUpdate(values, prevData.id);
                     })
                     .catch((info) => {
                         // console.log("Validate Failed:", info);
@@ -40,7 +45,7 @@ const UpdateAnimalForm = ({ visible, onUpdate, onCancel, prevData }) => {
                         },
                     ]}
                 >
-                    <Input value={"prevData && prevData.name"} />
+                    <Input />
                 </Form.Item>
 
                 <Form.Item
@@ -53,7 +58,7 @@ const UpdateAnimalForm = ({ visible, onUpdate, onCancel, prevData }) => {
                         },
                     ]}
                 >
-                    <Input value={prevData && prevData.age} />
+                    <Input />
                 </Form.Item>
 
                 <Form.Item
@@ -66,10 +71,11 @@ const UpdateAnimalForm = ({ visible, onUpdate, onCancel, prevData }) => {
                         },
                     ]}
                 >
-                    <Input value={prevData && prevData.type} />
+                    <Input />
                 </Form.Item>
             </Form>
         </Modal>
+        </>
     );
 };
 
