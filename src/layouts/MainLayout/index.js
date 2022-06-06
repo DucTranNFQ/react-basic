@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Outlet, Link } from "react-router-dom";
-import { Layout, Menu } from "antd";
+import { Layout, Menu, Popconfirm, Button, message } from "antd";
 import {
     MenuUnfoldOutlined,
     MenuFoldOutlined,
@@ -28,11 +28,12 @@ export default function MainLayout() {
     const { role } = userData;
     const handleLogout = () => {
         localStorage.removeItem("token");
+        message.success("you are logged out!")
         setUserData({});
     };
     return (
         <>
-            <Layout>
+            <Layout style={{minHeight: '100vh'}}>
                 <Sider trigger={null} collapsible collapsed={collapsed}>
                     <div className={`logo ${style.logo}`}>Duc Tran</div>
                     <Menu
@@ -57,13 +58,21 @@ export default function MainLayout() {
                             </Menu.Item>
                         ) : null}
                         {role === "admin" || role === "member" ? (
-                            <Menu.Item
-                                icon={<LogoutOutlined />}
-                                key="logout"
-                                onClick={handleLogout}
+                            
+                            <Popconfirm
+                                title="Are you sure you want to logout？"
+                                okText="Yes"
+                                cancelText="No"
+                                onConfirm={handleLogout}
                             >
-                                Logout
-                            </Menu.Item>
+                                <Menu.Item 
+                                    icon={<LogoutOutlined />}
+                                    key="logout"
+                                >
+                                    Logout
+                                </Menu.Item>
+                            </Popconfirm>
+
                         ) : null}
                         {!localStorage.token && (
                             <Menu.Item icon={<LoginOutlined />} key="login">

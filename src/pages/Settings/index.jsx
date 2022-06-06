@@ -21,7 +21,7 @@ const App = () => {
     const animalsURL = "https://629836b0f2decf5bb73d67d4.mockapi.io/animals";
 
     const onCreate = (values) => {
-        const response = fetchAPI.post(animalsURL, values);
+        const response = fetchAPI.post(values, animalsURL);
         response.then((res) => {
             if (res.status === 201) {
                 setUpdateUI(!updateUI);
@@ -176,14 +176,14 @@ const App = () => {
                 }}
             />
 
-            <UpdateAnimalForm
+            {/* <UpdateAnimalForm
                 visible={visibleUpdate}
                 onCreate={onCreate}
                 onCancel={() => {
                     setVisibleUpdate(false);
                 }}
                 prevData={{ dataUpdate }}
-            />
+            /> */}
 
             <Table
                 rowSelection={rowSelection}
