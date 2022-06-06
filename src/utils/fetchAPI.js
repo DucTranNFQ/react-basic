@@ -1,15 +1,6 @@
 const fetchAPI = {
     async getAll(url = "") {
-        return await fetch(url)
-            .then((res) => res.json())
-            .then((result) => {
-                return result.map((item) => {
-                    return {
-                        key: item.id,
-                        ...item,
-                    };
-                });
-            });
+        return await fetch(url);
     },
     async get(url = "", id = "") {
         return await fetch(`${url}/${id}`)

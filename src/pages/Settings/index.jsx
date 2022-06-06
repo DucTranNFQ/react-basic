@@ -51,7 +51,15 @@ const App = () => {
 
   useEffect(() => {
     const response = fetchAPI.getAll(animalsURL);
-    response.then((animals) => globalData.setField("animals", animals));
+    response.then(res => res.json()).then(data => {
+        const animals = data.map(item => {
+            return {
+                key: item.id,
+                ...item
+            }
+        })
+        globalData.setField("animals", animals)
+    })
   }, [updateUI]);
 
   const onClickEdit = (record) => {
